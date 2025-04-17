@@ -10,6 +10,7 @@ This repository contains libraries and scripts for controlling Universal Robots 
 - onRobot RG2 gripper control(in development)
 
 
+
 ## Files and Components
 
 ### Main Scripts
@@ -40,6 +41,11 @@ python3 test_main.py
 ```
 
 ### RG2 Gripper Control
+## Installation
+```bash
+# Install the onRobot package for gripper control
+pip install onrobot
+```
 ```python
 # Import the gripper module
 import onRobot.gripper as gripper
