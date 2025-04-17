@@ -8,6 +8,7 @@ This repository contains libraries and scripts for controlling Universal Robots 
 - Pick and place operations using saved positions
 - TCP position monitoring and adjustment
 - Basic gripper control functionality (in development)
+- onRobot RG2 gripper control
 
 
 ## Files and Components
@@ -15,7 +16,7 @@ This repository contains libraries and scripts for controlling Universal Robots 
 ### Main Scripts
 - **test_main.py**: Main control script that performs pick and place operations using movej commands. Moves the robot through predefined positions.
 - **pos_capture.py**: Tool for capturing and saving robot positions to the robot_positions.json file.
-- **test_gripper.py**: Testing script for the robot's gripper functionality like openning and closing the gripper.
+- **gripperTest.py**: Script for testing and controlling the onRobot RG2 gripper, including opening and closing operations.
 
 ### Data Files
 - **robot_positions.json**: Stores captured robot positions including TCP poses and joint positions.
@@ -37,6 +38,27 @@ python3 pos_capture.py
 ```python
 # Execute the main test script to run through saved positions
 python3 test_main.py
+```
+
+### RG2 Gripper Control
+```python
+# Import the gripper module
+import onRobot.gripper as gripper
+
+# Connect to the gripper
+rg_id = 0
+ip = "192.168.56.101"  # IP address of the gripper
+rg_gripper = gripper.RG2(ip, rg_id)
+
+# Get current gripper width
+rg_width = rg_gripper.get_rg_width()
+print("rg_width: ", rg_width)
+
+# Set gripper force
+target_force = 40.00
+
+# Open gripper to 100mm with specified force
+rg_gripper.rg_grip(100.0, target_force)
 ```
 
 ### Key Functions
