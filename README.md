@@ -45,8 +45,8 @@ python3 test_main.py
 import onRobot.gripper as gripper
 
 # Connect to the gripper
-rg_id = 0
-ip = "192.168.56.101"  # IP address of the gripper
+rg_id = 0 # gripper default ip is 0 check when multiple grippers
+ip = "192.168.5.4"  # IP address of the robot
 rg_gripper = gripper.RG2(ip, rg_id)
 
 # Get current gripper width
