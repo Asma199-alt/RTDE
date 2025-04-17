@@ -7,8 +7,7 @@ This repository contains libraries and scripts for controlling Universal Robots 
 - Position capture and storage in JSON format file
 - Pick and place operations using saved positions
 - TCP position monitoring and adjustment
-- Basic gripper control functionality (in development)
-- onRobot RG2 gripper control
+- onRobot RG2 gripper control(in development)
 
 
 ## Files and Components
