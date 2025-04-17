@@ -6,7 +6,7 @@ import util
 import rtde
 import json
 
-HOST = "129.244.149.108" 
+HOST = "129.244.149.108" # ursimr robot ip
 PORT = 30003
 
 
@@ -31,6 +31,7 @@ def get_current_pos_same_with_simulation():
     return np.asarray([tcp[1], tcp[0], rpy[-1]])
 
 
+    #move to tcp takes target_tcp as input
 def move_to_tcp(target_tcp):
     tool_acc = 0.05  # Safe: 0.5
     tool_vel = 0.05 # Safe: 0.2
@@ -41,9 +42,9 @@ def move_to_tcp(target_tcp):
         tool_acc, tool_vel)
     tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     tcp_socket.connect((HOST, PORT))
-    tcp_socket.send(str.encode(tcp_command))  # 利用字符串的encode方法编码成bytes，默认为utf-8类型
+    tcp_socket.send(str.encode(tcp_command))  
     tcp_socket.close()
-    # 确保已达到目标点，就可以紧接着发送下一条指令
+   
     actual_pos = get_current_tcp()
     target_rpy = util.rv2rpy(target_tcp[3], target_tcp[4], target_tcp[5])
     rpy = util.rv2rpy(actual_pos[3], actual_pos[4], actual_pos[5])
@@ -72,7 +73,7 @@ def get_digital_output():
     tcp_socket.close()
     return tool
 
-
+#open and close gripper takes target_width as input
 def operate_gripper(target_width):
     tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     tcp_socket.connect((HOST, PORT))
@@ -316,6 +317,7 @@ def test_robot_movement():
     go_home()
 
 
+#move to joint takes target_tcp as input 
 def move_to_joint(target_tcp):
     """
     Move the robot to a target TCP position using joint movement (movej).
@@ -346,14 +348,13 @@ def move_to_joint(target_tcp):
         rpy = util.rv2rpy(actual_pos[3], actual_pos[4], actual_pos[5])
         time.sleep(0.01)
 
-
+#pick and place with saved positions from json file
 def pick_and_place_with_saved_positions():
     # Load positions from JSON file
     with open('robot_positions.json', 'r') as f:
         positions = json.load(f)
     
     # Extract the TCP poses for pick, place, and home
-
     home_position = np.array(positions["home_main_final"]["tcp_pose"])
      
     place_1 = np.array(positions["1"]["tcp_pose"])
@@ -362,17 +363,11 @@ def pick_and_place_with_saved_positions():
     place_4 = np.array(positions["4"]["tcp_pose"])
     place_5 = np.array(positions["5"]["tcp_pose"])
 
-    # print("Starting pick and place operation...")
-    
-    # 1. Move to home position
-    # print("Moving to home position...")
-    # move_to_joint(home_position)
-    
-    # 2. Move to pick position with a safety approach
+    #move to place 1
     print("Approaching place 1...")
     move_to_joint(place_1)
     
-    # # 3. Open gripper, move down to pick, then close gripper
+    #pick place 2
     print("Picking place 2...")
     # operate_gripper(100)  # Open gripper fully
     move_to_joint(place_2)  # Move to exact pick position
@@ -380,48 +375,27 @@ def pick_and_place_with_saved_positions():
     # operate_gripper(0)  # Close gripper
     
     
-    # # 4. Move up with object
+    #pick place 3
     print("Picking place 3...")
     move_to_joint(place_3)
     time.sleep(0.5)  # Brief pause to ensure position is reached
 
+    #pick place 4
     print("Picking object...")
     # operate_gripper(100)  # Open gripper fully
     move_to_joint(place_4)  # Move to exact pick position
     time.sleep(0.5)  # Brief pause to ensure position is reached
     # operate_gripper(0)  # Close gripper
 
+    #pick place 5
     print("Picking object...")
     # operate_gripper(100)  # Open gripper fully
     move_to_joint(place_5)  # Move to exact pick position
     time.sleep(0.5)  # Brief pause to ensure position is reached
     # operate_gripper(0)  # Close gripper
     
-    # # 5. Check if grasp was successful
-    # if not check_grasp():
-    #     print("Failed to grasp object!")
-    #     # Return to home
-    #     move_to_joint(home_position)
-    #     return False
     
-    # # 6. Move to place position with safety approach
-    # print("Moving to place position...")
-    # place_approach = place_position.copy()
-    # place_approach[2] += 0.1  # 10cm above
-    # move_to_joint(place_approach)
-    
-    # # # 7. Move down and release object
-    # print("Placing object...")
-    # move_to_joint(place_position)
-    # time.sleep(0.5)  # Brief pause
-    # # operate_gripper(100)  # Open gripper to release
-    # time.sleep(0.5)  # Wait for release
-    
-    # # 8. Move up from place position
-    # print("Moving up from place position...")
-    # move_to_joint(place_approach)
-    
-    # 9. Return to home
+    #move to home
     time.sleep(0.5) 
     print("Returning to home position...")
     move_to_joint(home_position)
@@ -488,9 +462,7 @@ def test_gripper():
 
 if __name__ == '__main__':
     try:
-        # Call the gripper test function
-        # operate_gripper(40)
-        # Move to a safe position after tests
+        #moving robot to 5 different places from robot_positions.json
         pick_and_place_with_saved_positions()
        
     except Exception as e:

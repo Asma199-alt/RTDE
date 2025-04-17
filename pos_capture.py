@@ -5,7 +5,8 @@ import json
 import os
 
 # Connect to the robot
-robot_ip = "129.244.148.233"  # Change to your robot IP
+robot_ip = "129.244.148.233"  # ursimr robot ip
+#robot_ip = "192.168.5.4" real robot
 rtde_c = rtde_control.RTDEControlInterface(robot_ip)
 rtde_r = rtde_receive.RTDEReceiveInterface(robot_ip)
 
@@ -42,7 +43,7 @@ try:
             break
             
         # Enable freedrive
-        enable_freedrive()
+        #enable_freedrive()
         
         # Wait for user to position robot and press Enter
         input("Position the robot and press Enter to capture...")
@@ -52,7 +53,7 @@ try:
         joint_positions = rtde_r.getActualQ()
         
         # Disable freedrive
-        disable_freedrive()
+       # disable_freedrive()
         
         # Format positions for readability
         tcp_pose_rounded = [round(value, 4) for value in tcp_pose]

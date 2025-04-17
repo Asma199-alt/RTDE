@@ -7,6 +7,7 @@ import util
 
 # Robot configuration
 HOST = "129.244.149.108"
+#HOST = "192.168.5.4" real robot   
 PORT = 30003
 
 def check_robot_connection():
